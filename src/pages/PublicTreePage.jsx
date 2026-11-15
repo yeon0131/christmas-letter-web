@@ -81,11 +81,10 @@ function PublicTreePage() {
 
       <div className="tree-page-copy">
         <p className="eyebrow">{THEME_LABELS[tree.theme]} TREE</p>
-        <h1>{tree.ownerName}님에게<br />익명 편지를 남겨주세요.</h1>
+        <h1>크리스마스 선물<br />편지 보내기</h1>
         <p>
-          이름은 비밀로 간직할게요. 편지 내용만 보고
-          {' '}
-          {tree.ownerName}님이 당신을 맞힐 수 있도록 적어보세요.
+          {tree.ownerName}님이 크리스마스에 열어볼 익명 편지를 남겨주세요.
+          편지가 도착하면 냥트리에 생선이 하나씩 나타나요.
         </p>
 
         {tree.locked ? (
@@ -104,7 +103,7 @@ function PublicTreePage() {
 
         {tree.locked && (
           <button className="button button-large" type="button" onClick={() => setComposerOpen(true)}>
-            편지 오너먼트 달기
+            선물 편지 보내기
             <span aria-hidden="true">✉</span>
           </button>
         )}
@@ -123,7 +122,7 @@ function PublicTreePage() {
 
       {composerOpen && (
         <Modal
-          title="트리에 마음 달기"
+          title="크리스마스 선물 편지 보내기"
           eyebrow="A SECRET LETTER"
           onClose={() => setComposerOpen(false)}
           size="wide"
@@ -142,7 +141,7 @@ function PublicTreePage() {
             </label>
 
             <fieldset className="ornament-fieldset">
-              <legend>편지 오너먼트</legend>
+              <legend>편지 생선 고르기</legend>
               <div className="ornament-options">
                 {ORNAMENTS.map((ornament) => (
                   <label
@@ -181,7 +180,7 @@ function PublicTreePage() {
 
             {formError && <p className="form-error" role="alert">{formError}</p>}
             <button className="button button-full" type="submit" disabled={submitting}>
-              {submitting ? '편지를 다는 중...' : '비밀 편지 달기'}
+              {submitting ? '편지를 보내는 중...' : '선물 편지 보내기'}
             </button>
           </form>
         </Modal>

@@ -191,7 +191,7 @@ function OwnerTreePage() {
       <div className="owner-topbar">
         <div>
           <p className="eyebrow">{THEME_LABELS[tree.theme]} · OWNER</p>
-          <h1>{tree.ownerName}님의 비밀 트리</h1>
+          <h1>{tree.ownerName}님의 선물 편지 냥트리</h1>
         </div>
         <div className="owner-actions">
           <button className="button button-secondary" type="button" onClick={() => copyText(manageUrl, '관리 링크를 복사했어요.')}>
@@ -226,8 +226,8 @@ function OwnerTreePage() {
             <>
               <div className="locked-card">
                 <span className="lock-icon" aria-hidden="true">✉</span>
-                <h2>아직은 비밀이에요</h2>
-                <p>오너먼트는 볼 수 있지만 편지 내용과 작성자 이름은 크리스마스까지 서버에서도 보내주지 않아요.</p>
+                <h2>크리스마스 당일에 편지를 열어봐요</h2>
+                <p>생선은 볼 수 있지만 편지 내용과 작성자 이름은 크리스마스까지 비밀이에요.</p>
               </div>
               <Countdown revealAt={tree.revealAt} />
             </>

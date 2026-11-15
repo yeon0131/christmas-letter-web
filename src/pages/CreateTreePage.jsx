@@ -39,15 +39,15 @@ function CreateTreePage() {
   return (
     <section className="form-page">
       <div className="form-intro">
-        <p className="eyebrow">MAKE YOUR TREE</p>
-        <h1>누구의 마음을<br />기다릴까요?</h1>
-        <p>트리를 만든 뒤 공개 링크를 친구들에게 보내면 준비 끝이에요.</p>
+        <p className="eyebrow">CHRISTMAS LETTER TREE</p>
+        <h1>선물 편지를 받을<br />냥트리를 만들어요</h1>
+        <p>냥트리를 만든 뒤 공개 링크를 친구들에게 보내면 준비 끝이에요.</p>
         <div className="wax-seal" aria-hidden="true">25</div>
       </div>
 
       <form className="paper-form" onSubmit={handleSubmit}>
         <div className="form-header">
-          <span>CHRISTMAS TREE ORDER</span>
+          <span>CHRISTMAS CAT TREE</span>
           <span>2026</span>
         </div>
 
@@ -65,7 +65,7 @@ function CreateTreePage() {
         </label>
 
         <fieldset className="theme-fieldset">
-          <legend>트리 분위기</legend>
+          <legend>냥트리 분위기</legend>
           <div className="theme-options">
             {THEMES.map((item) => (
               <label className={`theme-option ${theme === item.value ? 'selected' : ''}`} key={item.value}>
