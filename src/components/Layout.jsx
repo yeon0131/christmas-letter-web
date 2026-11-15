@@ -23,10 +23,10 @@ function Layout({ children }) {
       </div>
 
       <header className="site-header">
-        <Link className="brand" to="/" aria-label="누가 썼게 홈">
+        <Link className="brand" to="/" aria-label="솔크시러 홈">
           <span className="brand-mark">✦</span>
           <span>
-            <strong>누가 썼게?</strong>
+            <strong>솔크시러</strong>
             <small>Christmas Letter Tree</small>
           </span>
         </Link>
