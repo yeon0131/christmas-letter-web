@@ -2,9 +2,9 @@ export const ORNAMENTS = [
   { value: 'RED_BAUBLE', label: '하트 생선', symbol: '♥' },
   { value: 'GOLD_STAR', label: '별빛 생선', symbol: '★' },
   { value: 'BLUE_BELL', label: '줄무늬 생선', symbol: '≋' },
-  { value: 'GIFT_TAG', label: '리본 생선', symbol: '✦' },
+  { value: 'GIFT_TAG', label: '꽃 생선', symbol: '✦' },
   { value: 'CANDY_CANE', label: '사탕 생선', symbol: '○' },
-  { value: 'GREEN_HEART', label: '초록 생선', symbol: '♥' },
+  { value: 'GREEN_HEART', label: '체크 생선', symbol: '♥' },
 ]
 
 export const SAMPLE_ORNAMENTS = [

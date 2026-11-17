@@ -21,14 +21,19 @@ function ChristmasTree({
   interactive = false,
   showEmptyMessage = false,
   showNameplate = true,
+  favoriteFish,
 }) {
+  const displayedOrnaments = favoriteFish
+    ? [{ id: 'favorite-fish', ornamentType: favoriteFish, decorative: true }, ...ornaments]
+    : ornaments
+
   return (
     <section className={`tree-stage cat-tree-stage theme-${theme.toLowerCase()}`} aria-label={`${ownerName || ''}의 크리스마스 냥트리`}>
       <div className="tree-glow" aria-hidden="true" />
       <img className="tree-image cat-tree-image" src={catTreeImage} alt="초록빛 마법 궤도 속에 서 있는 산타 고양이" />
 
       <div className="ornament-layer">
-        {ornaments.map((ornament, index) => {
+        {displayedOrnaments.map((ornament, index) => {
           const slot = FISH_SLOTS[index % FISH_SLOTS.length]
           const orbitLayer = Math.floor(index / FISH_SLOTS.length)
           const style = {
@@ -39,7 +44,7 @@ function ChristmasTree({
           }
           const className = `ornament ornament-${ornament.ornamentType.toLowerCase()}`
 
-          if (interactive) {
+          if (interactive && !ornament.decorative) {
             return (
               <button
                 type="button"
@@ -54,7 +59,16 @@ function ChristmasTree({
             )
           }
 
-          return <span className={className} style={style} key={ornament.id} aria-hidden="true"><span /></span>
+          return (
+            <span
+              className={`${className}${ornament.decorative ? ' favorite-fish' : ''}`}
+              style={style}
+              key={ornament.id}
+              aria-hidden="true"
+            >
+              <span />
+            </span>
+          )
         })}
       </div>
 

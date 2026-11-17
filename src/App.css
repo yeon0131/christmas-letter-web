@@ -774,6 +774,7 @@ button.ornament:hover {
 
 .field > span,
 .theme-fieldset legend,
+.fish-fieldset legend,
 .ornament-fieldset legend {
   display: block;
   margin-bottom: 10px;
@@ -2551,6 +2552,100 @@ h3,
   border-radius: 0;
   box-shadow: none;
   clip-path: none;
+}
+
+.owner-name-input,
+.owner-name-input::placeholder {
+  font-family: var(--font-hand);
+  font-size: 1.22rem;
+  font-weight: 700;
+}
+
+.owner-name-input::placeholder {
+  color: #9a806d;
+  opacity: 0.82;
+}
+
+.fish-fieldset {
+  margin: 0 0 29px;
+  padding: 0;
+  border: 0;
+}
+
+.fish-fieldset legend {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--green);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.fish-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fish-choice {
+  position: relative;
+  display: flex;
+  min-height: 118px;
+  padding: 12px 8px 10px;
+  gap: 3px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  text-align: center;
+  background: rgba(255, 253, 244, 0.62);
+  border: 2px dashed rgba(54, 91, 58, 0.28);
+  border-radius: 20px 15px 22px 14px;
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.fish-choice:hover {
+  transform: translateY(-2px) rotate(-1deg);
+}
+
+.fish-choice.selected {
+  background: rgba(255, 242, 204, 0.78);
+  border-color: var(--red);
+  border-style: solid;
+  box-shadow: 2px 3px 0 rgba(169, 47, 39, 0.12);
+}
+
+.fish-choice input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fish-choice input:focus-visible + .mini-ornament {
+  outline: 3px solid rgba(198, 156, 77, 0.68);
+  outline-offset: 4px;
+}
+
+.fish-choice .mini-ornament[class*='ornament-'] {
+  width: 88px;
+  height: 59px;
+  margin: 0 auto 3px;
+}
+
+.fish-choice strong {
+  font-size: 1.05rem;
+}
+
+.cat-tree-stage .favorite-fish {
+  filter: drop-shadow(0 0 7px rgba(239, 183, 47, 0.52));
+}
+
+@media (min-width: 560px) {
+  .fish-choice-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* Keep the three-step guide as open doodles, matching the approved mockup. */

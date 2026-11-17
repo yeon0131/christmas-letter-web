@@ -1,18 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { treeApi } from '../api'
+import { ORNAMENTS } from '../ornaments'
 import { saveTreeAccess } from '../storage'
-
-const THEMES = [
-  { value: 'CLASSIC', name: '클래식 레드', description: '리본과 체리 레드' },
-  { value: 'SNOWY', name: '스노우 크림', description: '눈과 따뜻한 크림색' },
-  { value: 'MIDNIGHT', name: '미드나잇 블루', description: '밤하늘과 금빛 별' },
-]
 
 function CreateTreePage() {
   const navigate = useNavigate()
   const [ownerName, setOwnerName] = useState('')
-  const [theme, setTheme] = useState('CLASSIC')
+  const [favoriteFish, setFavoriteFish] = useState('RED_BAUBLE')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -22,7 +17,7 @@ function CreateTreePage() {
     setSubmitting(true)
 
     try {
-      const created = await treeApi.create({ ownerName, theme })
+      const created = await treeApi.create({ ownerName, theme: 'CLASSIC', favoriteFish })
       saveTreeAccess({
         slug: created.slug,
         adminKey: created.adminKey,
@@ -54,6 +49,7 @@ function CreateTreePage() {
         <label className="field">
           <span>트리 주인 이름</span>
           <input
+            className="owner-name-input"
             value={ownerName}
             onChange={(event) => setOwnerName(event.target.value)}
             maxLength={30}
@@ -64,21 +60,20 @@ function CreateTreePage() {
           <small>{ownerName.length}/30</small>
         </label>
 
-        <fieldset className="theme-fieldset">
-          <legend>냥트리 분위기</legend>
-          <div className="theme-options">
-            {THEMES.map((item) => (
-              <label className={`theme-option ${theme === item.value ? 'selected' : ''}`} key={item.value}>
+        <fieldset className="fish-fieldset">
+          <legend>첫 번째 물고기를 골라주세요</legend>
+          <div className="fish-choice-grid">
+            {ORNAMENTS.map((fish) => (
+              <label className={`fish-choice ${favoriteFish === fish.value ? 'selected' : ''}`} key={fish.value}>
                 <input
                   type="radio"
-                  name="theme"
-                  value={item.value}
-                  checked={theme === item.value}
-                  onChange={() => setTheme(item.value)}
+                  name="favoriteFish"
+                  value={fish.value}
+                  checked={favoriteFish === fish.value}
+                  onChange={() => setFavoriteFish(fish.value)}
                 />
-                <span className={`theme-swatch swatch-${item.value.toLowerCase()}`} aria-hidden="true" />
-                <strong>{item.name}</strong>
-                <small>{item.description}</small>
+                <span className={`mini-ornament ornament-${fish.value.toLowerCase()}`} aria-hidden="true" />
+                <strong>{fish.label}</strong>
               </label>
             ))}
           </div>
