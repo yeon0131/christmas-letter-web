@@ -209,7 +209,6 @@ function OwnerTreePage() {
             ownerName={tree.ownerName}
             ornaments={tree.ornaments}
             theme={tree.theme}
-            favoriteFish={tree.favoriteFish}
             interactive={!tree.locked}
             onSelect={openLetter}
             showEmptyMessage

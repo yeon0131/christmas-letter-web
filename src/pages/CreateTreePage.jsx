@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { treeApi } from '../api'
-import { ORNAMENTS } from '../ornaments'
 import { saveTreeAccess } from '../storage'
 
 function CreateTreePage() {
   const navigate = useNavigate()
   const [ownerName, setOwnerName] = useState('')
-  const [favoriteFish, setFavoriteFish] = useState('RED_BAUBLE')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -17,7 +15,7 @@ function CreateTreePage() {
     setSubmitting(true)
 
     try {
-      const created = await treeApi.create({ ownerName, theme: 'CLASSIC', favoriteFish })
+      const created = await treeApi.create({ ownerName, theme: 'CLASSIC' })
       saveTreeAccess({
         slug: created.slug,
         adminKey: created.adminKey,
@@ -59,25 +57,6 @@ function CreateTreePage() {
           />
           <small>{ownerName.length}/30</small>
         </label>
-
-        <fieldset className="fish-fieldset">
-          <legend>첫 번째 물고기를 골라주세요</legend>
-          <div className="fish-choice-grid">
-            {ORNAMENTS.map((fish) => (
-              <label className={`fish-choice ${favoriteFish === fish.value ? 'selected' : ''}`} key={fish.value}>
-                <input
-                  type="radio"
-                  name="favoriteFish"
-                  value={fish.value}
-                  checked={favoriteFish === fish.value}
-                  onChange={() => setFavoriteFish(fish.value)}
-                />
-                <span className={`mini-ornament ornament-${fish.value.toLowerCase()}`} aria-hidden="true" />
-                <strong>{fish.label}</strong>
-              </label>
-            ))}
-          </div>
-        </fieldset>
 
         <div className="form-notice">
           <span aria-hidden="true">✦</span>
