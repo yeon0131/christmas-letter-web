@@ -30,8 +30,7 @@ function OwnerTreePage() {
   const [loading, setLoading] = useState(Boolean(access))
   const [loadError, setLoadError] = useState('')
   const [selectedLetter, setSelectedLetter] = useState(null)
-  const [guess, setGuess] = useState('')
-  const [guessResult, setGuessResult] = useState(null)
+  const [letterError, setLetterError] = useState('')
   const [working, setWorking] = useState(false)
   const [copyNotice, setCopyNotice] = useState('')
 
@@ -104,30 +103,7 @@ function OwnerTreePage() {
     const letter = tree.letters.find((item) => item.id === ornament.id)
     if (letter) {
       setSelectedLetter(letter)
-      setGuess('')
-      setGuessResult(null)
-    }
-  }
-
-  const handleGuess = async (event) => {
-    event.preventDefault()
-    setWorking(true)
-    setGuessResult(null)
-    try {
-      const result = await treeApi.guessSender(slug, selectedLetter.id, adminKey, guess)
-      setGuessResult(result)
-      if (result.correct) {
-        setSelectedLetter((current) => ({
-          ...current,
-          identityRevealed: true,
-          senderName: result.senderName,
-        }))
-        await loadTree()
-      }
-    } catch (error) {
-      setGuessResult({ correct: false, message: error.message })
-    } finally {
-      setWorking(false)
+      setLetterError('')
     }
   }
 
@@ -140,7 +116,7 @@ function OwnerTreePage() {
       setSelectedLetter(null)
       await loadTree()
     } catch (error) {
-      setGuessResult({ correct: false, message: error.message })
+      setLetterError(error.message)
     } finally {
       setWorking(false)
     }
@@ -207,6 +183,18 @@ function OwnerTreePage() {
         {!tree.locked && <p className="nyan-open-hint">물고기를 눌러 편지를 읽어봐요!</p>}
       </section>
 
+      {tree.locked && tree.letters.length > 0 && (
+        <section className="nyan-sender-list" aria-label="편지를 보낸 친구들">
+          <h2>편지를 보낸 친구들</h2>
+          <p>이름은 먼저 보여요. 편지 내용은 크리스마스에 열려요.</p>
+          <ul>
+            {tree.letters.map((letter) => (
+              <li key={letter.id}>From. {letter.senderName}</li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="nyan-share-box" aria-label="공개 링크 공유">
         <div className="nyan-share-heading">
           <span aria-hidden="true">✦</span>
@@ -218,7 +206,6 @@ function OwnerTreePage() {
           <button type="button" onClick={() => copyText(shareUrl, '공개 링크를 복사했어요! 친구에게 보내주세요.')}>공개 링크 복사하기</button>
           <span className="nyan-button-rays right" aria-hidden="true" />
         </div>
-        <Link className="nyan-preview-public" to={`/tree/${slug}`}>친구 화면 미리보기 →</Link>
       </section>
 
       <section className="nyan-manage-box" aria-label="관리 링크 안내">
@@ -250,33 +237,11 @@ function OwnerTreePage() {
             <div className="letter-paper">
               <p>{selectedLetter.content}</p>
               <div className="letter-signature">
-                {selectedLetter.identityRevealed
-                  ? <>From. <strong>{selectedLetter.senderName}</strong></>
-                  : <>From. <strong>아직 비밀</strong></>}
+                From. <strong>{selectedLetter.senderName}</strong>
               </div>
             </div>
 
-            {!selectedLetter.identityRevealed && (
-              <form className="guess-form" onSubmit={handleGuess}>
-                <label className="field">
-                  <span>누가 썼을까요?</span>
-                  <input
-                    value={guess}
-                    onChange={(event) => setGuess(event.target.value)}
-                    maxLength={20}
-                    placeholder="생각나는 이름"
-                    required
-                  />
-                </label>
-                <button className="button" type="submit" disabled={working}>정답 확인</button>
-              </form>
-            )}
-
-            {guessResult && (
-              <p className={`guess-result ${guessResult.correct ? 'correct' : 'wrong'}`} role="status">
-                {guessResult.message}
-              </p>
-            )}
+            {letterError && <p className="guess-result wrong" role="alert">{letterError}</p>}
 
             <button className="danger-link" type="button" onClick={handleDelete} disabled={working}>
               이 편지 삭제하기

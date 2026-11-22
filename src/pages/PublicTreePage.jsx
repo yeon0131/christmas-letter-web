@@ -130,7 +130,7 @@ function PublicTreePage() {
         >
           <form className="letter-form" onSubmit={handleSubmit}>
             <label className="field">
-              <span>정답으로 사용할 이름</span>
+              <span>사용할 이름</span>
               <input
                 value={form.senderName}
                 onChange={(event) => setForm({ ...form, senderName: event.target.value })}
@@ -138,7 +138,7 @@ function PublicTreePage() {
                 placeholder="트리 주인이 나를 부르는 이름"
                 required
               />
-              <small>크리스마스까지 트리 주인에게 보이지 않아요.</small>
+              <small>이름은 바로 보이고, 편지 내용은 크리스마스까지 비밀이에요.</small>
             </label>
 
             <fieldset className="ornament-fieldset">
