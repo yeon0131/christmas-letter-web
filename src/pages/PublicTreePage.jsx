@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { treeApi } from '../api'
+import titleEars from '../assets/title-cat-ears.png'
 import ChristmasTree from '../components/ChristmasTree'
 import Countdown from '../components/Countdown'
 import Modal from '../components/Modal'
 import { ErrorView, LoadingView } from '../components/StatusView'
-import { ORNAMENTS, THEME_LABELS } from '../ornaments'
+import { ORNAMENTS } from '../ornaments'
 
 function PublicTreePage() {
   const { slug } = useParams()
@@ -76,49 +77,49 @@ function PublicTreePage() {
   if (loadError) return <ErrorView message={loadError} onRetry={loadTree} />
 
   return (
-    <section className="tree-page">
+    <section className="nyan-public-page">
       {notice && <div className="toast" role="status">{notice}</div>}
 
-      <div className="tree-page-copy">
-        <p className="eyebrow">{THEME_LABELS[tree.theme]} TREE</p>
-        <h1>크리스마스 선물<br />편지 보내기</h1>
-        <p>
-          {tree.ownerName}님이 크리스마스에 열어볼 익명 편지를 남겨주세요.
-          편지가 도착하면 냥트리에 생선이 하나씩 나타나요.
-        </p>
+      <section className="nyan-public-intro">
+        <p className="nyan-public-kicker"><span aria-hidden="true">✦</span> 친구의 냥트리에 도착했어요! <span aria-hidden="true">✦</span></p>
+        <h1><strong>{tree.ownerName}</strong>님의<br /><span className="nyan-public-title-tree"><img src={titleEars} alt="" aria-hidden="true" />냥트리</span></h1>
+        <p className="nyan-public-subtitle"><span>크리스마스 선물 편지 보내기</span></p>
+      </section>
 
-        {tree.locked ? (
-          <Countdown revealAt={tree.revealAt} />
-        ) : (
-          <div className="open-notice">
-            <span aria-hidden="true">✦</span>
-            <p>편지가 공개되어 새 편지 접수가 마감됐어요.</p>
-          </div>
-        )}
-
-        <div className="letter-counter">
-          <strong>{tree.letterCount}</strong>
-          <span>개의 마음이<br />트리에 달렸어요</span>
-        </div>
-
-        {tree.locked && (
-          <button className="button button-large" type="button" onClick={() => setComposerOpen(true)}>
-            선물 편지 보내기
-            <span aria-hidden="true">✉</span>
-          </button>
-        )}
-
-        <Link className="text-link back-link" to="/">나도 트리 만들기 →</Link>
-      </div>
-
-      <div className="tree-page-visual">
+      <section className="nyan-public-tree" aria-label={`${tree.ownerName}님의 냥트리`}>
         <ChristmasTree
           ownerName={tree.ownerName}
           ornaments={tree.ornaments}
-          theme={tree.theme}
           showEmptyMessage
+          showNameplate={false}
         />
-      </div>
+        <p className="nyan-letter-count"><span>지금까지 달린 물고기</span><strong>{tree.letterCount}</strong><span>마리</span></p>
+      </section>
+
+      {tree.locked ? (
+        <Countdown revealAt={tree.revealAt} />
+      ) : (
+        <section className="nyan-unlocked-card">
+          <span aria-hidden="true">✦</span>
+          <h2>편지가 공개됐어요</h2>
+          <p>새 선물 편지 접수는 마감됐어요.</p>
+        </section>
+      )}
+
+      {tree.locked && (
+        <section className="nyan-letter-invite">
+          <span className="nyan-letter-doodle" aria-hidden="true">✉</span>
+          <h2><strong>{tree.ownerName}</strong>님에게<br />익명 선물 편지를 남겨주세요</h2>
+          <p>편지를 보내면 냥트리의 초록색 줄에<br />내가 고른 물고기가 하나 달려요.</p>
+          <div className="nyan-public-cta-wrap">
+            <span className="nyan-button-rays left" aria-hidden="true" />
+            <button type="button" onClick={() => setComposerOpen(true)}>선물 편지 보내기 <span aria-hidden="true">›</span></button>
+            <span className="nyan-button-rays right" aria-hidden="true" />
+          </div>
+        </section>
+      )}
+
+      <Link className="nyan-public-make" to="/">나도 냥트리 만들기 →</Link>
 
       {composerOpen && (
         <Modal

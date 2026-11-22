@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { treeApi } from '../api'
+import titleEars from '../assets/title-cat-ears.png'
 import ChristmasTree from '../components/ChristmasTree'
 import Countdown from '../components/Countdown'
 import Modal from '../components/Modal'
 import { ErrorView, LoadingView } from '../components/StatusView'
-import { THEME_LABELS } from '../ornaments'
 import { getTreeAccess, saveTreeAccess } from '../storage'
 
 function getInitialAccess(slug) {
@@ -185,71 +185,59 @@ function OwnerTreePage() {
   }
 
   return (
-    <section className="owner-page">
+    <section className="nyan-owner-page">
       {copyNotice && <div className="toast" role="status">{copyNotice}</div>}
 
-      <div className="owner-topbar">
-        <div>
-          <p className="eyebrow">{THEME_LABELS[tree.theme]} · OWNER</p>
-          <h1>{tree.ownerName}님의 선물 편지 냥트리</h1>
+      <section className="nyan-owner-intro">
+        <p className="nyan-owner-kicker"><span aria-hidden="true">✦</span> 냥트리가 완성됐어요! <span aria-hidden="true">✦</span></p>
+        <h1><strong>{tree.ownerName}</strong>님의<br /><span className="nyan-owner-title-tree"><img src={titleEars} alt="" aria-hidden="true" />냥트리</span></h1>
+        <p className="nyan-owner-subtitle">공개 링크를 친구들에게 보내고<br />크리스마스 선물 편지를 기다려요</p>
+      </section>
+
+      <section className="nyan-owner-tree" aria-label={`${tree.ownerName}님의 냥트리`}>
+        <ChristmasTree
+          ownerName={tree.ownerName}
+          ornaments={tree.ornaments}
+          interactive={!tree.locked}
+          onSelect={openLetter}
+          showEmptyMessage
+          showNameplate={false}
+        />
+        <p className="nyan-letter-count"><span>도착한 선물 편지</span><strong>{tree.letterCount}</strong><span>개</span></p>
+        {!tree.locked && <p className="nyan-open-hint">물고기를 눌러 편지를 읽어봐요!</p>}
+      </section>
+
+      <section className="nyan-share-box" aria-label="공개 링크 공유">
+        <div className="nyan-share-heading">
+          <span aria-hidden="true">✦</span>
+          <div><h2>친구에게 보낼 공개 링크</h2><p>이 링크로 들어온 친구들이 편지를 달 수 있어요.</p></div>
         </div>
-        <div className="owner-actions">
-          <button className="button button-secondary" type="button" onClick={() => copyText(manageUrl, '관리 링크를 복사했어요.')}>
-            관리 링크 보관
-          </button>
-          <button className="button" type="button" onClick={() => copyText(shareUrl, '친구에게 보낼 링크를 복사했어요!')}>
-            친구 초대 링크 복사
-          </button>
+        <div className="nyan-link-paper"><span>{shareUrl}</span></div>
+        <div className="nyan-share-button-wrap">
+          <span className="nyan-button-rays left" aria-hidden="true" />
+          <button type="button" onClick={() => copyText(shareUrl, '공개 링크를 복사했어요! 친구에게 보내주세요.')}>공개 링크 복사하기</button>
+          <span className="nyan-button-rays right" aria-hidden="true" />
         </div>
-      </div>
+        <Link className="nyan-preview-public" to={`/tree/${slug}`}>친구 화면 미리보기 →</Link>
+      </section>
 
-      <div className="owner-grid">
-        <div className="owner-tree-column">
-          <ChristmasTree
-            ownerName={tree.ownerName}
-            ornaments={tree.ornaments}
-            theme={tree.theme}
-            interactive={!tree.locked}
-            onSelect={openLetter}
-            showEmptyMessage
-          />
-        </div>
+      <section className="nyan-manage-box" aria-label="관리 링크 안내">
+        <span className="nyan-manage-key" aria-hidden="true">⌁</span>
+        <div><h2>관리 링크는 나만 보관해요</h2><p>로그인 없이 이 링크로 내 냥트리를 다시 열 수 있어요.<br />친구에게는 위의 공개 링크만 보내주세요.</p></div>
+        <button type="button" onClick={() => copyText(manageUrl, '관리 링크를 복사했어요. 나만 보관해요!')}>관리 링크 복사하기</button>
+      </section>
 
-        <aside className="owner-panel">
-          <div className="letter-count-card">
-            <span>지금까지 도착한 마음</span>
-            <strong>{tree.letterCount}</strong>
-            <small>LETTERS</small>
-          </div>
+      {tree.locked ? (
+        <Countdown revealAt={tree.revealAt} />
+      ) : (
+        <section className="nyan-unlocked-card">
+          <span aria-hidden="true">✦</span>
+          <h2>편지가 열렸어요!</h2>
+          <p>냥트리의 물고기를 눌러 편지를 읽고 누가 썼는지 맞혀보세요.</p>
+        </section>
+      )}
 
-          {tree.locked ? (
-            <>
-              <div className="locked-card">
-                <span className="lock-icon" aria-hidden="true">✉</span>
-                <h2>크리스마스 당일에 편지를 열어봐요</h2>
-                <p>생선은 볼 수 있지만 편지 내용과 작성자 이름은 크리스마스까지 비밀이에요.</p>
-              </div>
-              <Countdown revealAt={tree.revealAt} />
-            </>
-          ) : (
-            <div className="unlocked-card">
-              <span aria-hidden="true">✦</span>
-              <h2>편지가 열렸어요!</h2>
-              <p>트리의 오너먼트를 눌러 편지를 읽고 누가 썼는지 맞혀보세요.</p>
-            </div>
-          )}
-
-          <div className="share-card">
-            <span>친구에게 보내는 주소</span>
-            <code>{shareUrl}</code>
-            <button type="button" onClick={() => copyText(shareUrl, '공개 링크를 복사했어요!')}>주소 복사</button>
-          </div>
-
-          <p className="admin-warning">
-            관리 링크에는 비밀 키가 들어 있어요. 친구에게는 공개 링크만 보내주세요.
-          </p>
-        </aside>
-      </div>
+      <Link className="nyan-back-home" to="/">← 새 냥트리 만들기</Link>
 
       {selectedLetter && (
         <Modal

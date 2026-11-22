@@ -1,21 +1,35 @@
-import catTreeImage from '../assets/cat-magic-tree.png'
+import catTreeImage from '../assets/hero-cat.png'
+import fishCandy from '../assets/fish-candy.png'
+import fishChecker from '../assets/fish-checker.png'
+import fishFlower from '../assets/fish-flower.png'
+import fishHeart from '../assets/fish-heart.png'
+import fishStar from '../assets/fish-star.png'
+import fishStripe from '../assets/fish-stripe.png'
+
+const FISH_IMAGES = {
+  RED_BAUBLE: fishHeart,
+  GOLD_STAR: fishStar,
+  BLUE_BELL: fishStripe,
+  GIFT_TAG: fishFlower,
+  CANDY_CANE: fishCandy,
+  GREEN_HEART: fishChecker,
+}
 
 const FISH_SLOTS = [
-  { x: 18, y: 42 },
-  { x: 78, y: 40 },
-  { x: 24, y: 72 },
-  { x: 76, y: 70 },
-  { x: 30, y: 27 },
-  { x: 70, y: 25 },
-  { x: 13, y: 58 },
-  { x: 87, y: 57 },
-  { x: 42, y: 85 },
-  { x: 60, y: 84 },
+  { x: 39, y: 51 },
+  { x: 79, y: 41 },
+  { x: 40, y: 81 },
+  { x: 72, y: 72 },
+  { x: 23, y: 69 },
+  { x: 84, y: 62 },
+  { x: 61, y: 48 },
+  { x: 19, y: 50 },
+  { x: 57, y: 84 },
+  { x: 72, y: 34 },
 ]
 
 function ChristmasTree({
   ornaments = [],
-  theme = 'CLASSIC',
   ownerName,
   onSelect,
   interactive = false,
@@ -23,61 +37,57 @@ function ChristmasTree({
   showNameplate = true,
 }) {
   return (
-    <section className={`tree-stage cat-tree-stage theme-${theme.toLowerCase()}`} aria-label={`${ownerName || ''}의 크리스마스 냥트리`}>
-      <div className="tree-glow" aria-hidden="true" />
-      <img className="tree-image cat-tree-image" src={catTreeImage} alt="초록빛 마법 궤도 속에 서 있는 산타 고양이" />
+    <section className="nyan-tree-art" aria-label={`${ownerName || ''}의 크리스마스 냥트리`}>
+      <img className="nyan-tree-cat" src={catTreeImage} alt="초록빛 마법 궤도 속에 서 있는 산타 고양이" />
 
-      <div className="ornament-layer">
+      <div className="nyan-fish-layer">
         {ornaments.map((ornament, index) => {
           const slot = FISH_SLOTS[index % FISH_SLOTS.length]
           const orbitLayer = Math.floor(index / FISH_SLOTS.length)
           const style = {
-            left: `${slot.x + ((orbitLayer % 3) - 1) * 2}%`,
-            top: `${slot.y + (orbitLayer % 2 === 0 ? -1 : 2)}%`,
-            '--ornament-delay': `${Math.min(index * 0.08, 1.2)}s`,
-            '--fish-tilt': `${[-8, 6, -3, 9, -5][index % 5]}deg`,
+            left: `${slot.x + ((orbitLayer % 3) - 1) * 1.5}%`,
+            top: `${slot.y + (orbitLayer % 2 === 0 ? 0 : 2)}%`,
+            '--fish-delay': `${Math.min(index * 0.08, 1.2)}s`,
+            '--fish-tilt': `${[-7, 6, 5, -5, 8][index % 5]}deg`,
           }
-          const className = `ornament ornament-${ornament.ornamentType.toLowerCase()}`
+          const fish = (
+            <img src={FISH_IMAGES[ornament.ornamentType] || fishHeart} alt="선물 편지가 담긴 물고기" />
+          )
 
           if (interactive) {
             return (
               <button
                 type="button"
-                className={className}
+                className="nyan-tree-fish"
                 style={style}
                 key={ornament.id}
                 onClick={() => onSelect?.(ornament)}
                 aria-label="편지 열기"
               >
-                <span aria-hidden="true" />
+                {fish}
               </button>
             )
           }
 
           return (
             <span
-              className={className}
+              className="nyan-tree-fish"
               style={style}
               key={ornament.id}
               aria-hidden="true"
             >
-              <span />
+              {fish}
             </span>
           )
         })}
       </div>
 
       {showEmptyMessage && ornaments.length === 0 && (
-        <div className="empty-tree-note">
-          첫 번째 선물 편지를<br />기다리고 있어요
-        </div>
+        <span className="nyan-empty-note">첫 선물 편지를 기다리는 중...</span>
       )}
 
       {showNameplate && (
-        <div className="tree-nameplate">
-          <small>CHRISTMAS MAIL</small>
-          <strong>{ownerName || '당신'}의 냥트리</strong>
-        </div>
+        <span className="sr-only">{ownerName || '당신'}의 냥트리</span>
       )}
     </section>
   )
