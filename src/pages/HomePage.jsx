@@ -31,7 +31,13 @@ function HomePage() {
     setSubmitting(true)
 
     try {
-      const created = await treeApi.create({ ownerName: ownerName.trim(), theme: 'CLASSIC' })
+      // 운영 백엔드가 이전 버전일 때도 트리 생성이 되도록 기본 물고기를 함께 보낸다.
+      // 화면에서는 트리 생성 시 물고기를 선택하지 않고, 편지를 쓸 때만 고른다.
+      const created = await treeApi.create({
+        ownerName: ownerName.trim(),
+        theme: 'CLASSIC',
+        favoriteFish: 'RED_BAUBLE',
+      })
       saveTreeAccess({
         slug: created.slug,
         adminKey: created.adminKey,

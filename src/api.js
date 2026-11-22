@@ -22,8 +22,12 @@ async function request(path, options = {}) {
   const data = hasBody ? await response.json().catch(() => null) : null
 
   if (!response.ok) {
+    const fieldMessage = data?.fieldErrors
+      ? Object.values(data.fieldErrors).find(Boolean)
+      : null
+
     throw new ApiError(
-      data?.message || '요청을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.',
+      fieldMessage || data?.message || '요청을 처리하지 못했어요. 잠시 후 다시 시도해 주세요.',
       response.status,
       data,
     )
