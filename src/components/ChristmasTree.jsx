@@ -15,6 +15,8 @@ const FISH_IMAGES = {
   GREEN_HEART: fishChecker,
 }
 
+const MAX_VISIBLE_FISH = 10
+
 const FISH_SLOTS = [
   { x: 39, y: 51 },
   { x: 79, y: 41 },
@@ -33,25 +35,40 @@ function ChristmasTree({
   ownerName,
   onSelect,
   interactive = false,
+  senderNames = {},
+  showSenderNames = false,
   showEmptyMessage = false,
   showNameplate = true,
 }) {
+  const firstVisibleIndex = Math.max(ornaments.length - MAX_VISIBLE_FISH, 0)
+  const visibleOrnaments = ornaments.slice(firstVisibleIndex)
+  const hiddenFishCount = ornaments.length - visibleOrnaments.length
+
   return (
     <section className="nyan-tree-art" aria-label={`${ownerName || ''}의 크리스마스 냥트리`}>
       <img className="nyan-tree-cat" src={catTreeImage} alt="초록빛 마법 궤도 속에 서 있는 산타 고양이" />
 
       <div className="nyan-fish-layer">
-        {ornaments.map((ornament, index) => {
+        {visibleOrnaments.map((ornament, visibleIndex) => {
+          const index = firstVisibleIndex + visibleIndex
           const slot = FISH_SLOTS[index % FISH_SLOTS.length]
           const orbitLayer = Math.floor(index / FISH_SLOTS.length)
+          const fishTilt = [-7, 6, 5, -5, 8][index % 5]
+          const senderName = showSenderNames ? senderNames[ornament.id] : ''
           const style = {
             left: `${slot.x + ((orbitLayer % 3) - 1) * 1.5}%`,
             top: `${slot.y + (orbitLayer % 2 === 0 ? 0 : 2)}%`,
             '--fish-delay': `${Math.min(index * 0.08, 1.2)}s`,
-            '--fish-tilt': `${[-7, 6, 5, -5, 8][index % 5]}deg`,
+            '--fish-tilt': `${fishTilt}deg`,
+            '--fish-counter-tilt': `${-fishTilt}deg`,
           }
           const fish = (
-            <img src={FISH_IMAGES[ornament.ornamentType] || fishHeart} alt="선물 편지가 담긴 물고기" />
+            <>
+              <img src={FISH_IMAGES[ornament.ornamentType] || fishHeart} alt="선물 편지가 담긴 물고기" />
+              {senderName && (
+                <span className="nyan-tree-fish-name" title={senderName}>{senderName}</span>
+              )}
+            </>
           )
 
           if (interactive) {
@@ -62,7 +79,7 @@ function ChristmasTree({
                 style={style}
                 key={ornament.id}
                 onClick={() => onSelect?.(ornament)}
-                aria-label="편지 열기"
+                aria-label={senderName ? `${senderName}의 편지 열기` : '편지 열기'}
               >
                 {fish}
               </button>
@@ -74,13 +91,18 @@ function ChristmasTree({
               className="nyan-tree-fish"
               style={style}
               key={ornament.id}
-              aria-hidden="true"
+              aria-label={senderName ? `${senderName}의 선물 편지` : undefined}
+              aria-hidden={senderName ? undefined : true}
             >
               {fish}
             </span>
           )
         })}
       </div>
+
+      {hiddenFishCount > 0 && (
+        <span className="nyan-fish-overflow">+{hiddenFishCount}마리</span>
+      )}
 
       {showEmptyMessage && ornaments.length === 0 && (
         <span className="nyan-empty-note">첫 선물 편지를 기다리는 중...</span>

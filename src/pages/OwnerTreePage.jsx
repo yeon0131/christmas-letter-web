@@ -82,6 +82,10 @@ function OwnerTreePage() {
     [adminKey, slug],
   )
 
+  const senderNames = Object.fromEntries(
+    (tree?.letters || []).map((letter) => [letter.id, letter.senderName]),
+  )
+
   const copyText = async (value, message) => {
     try {
       await navigator.clipboard.writeText(value)
@@ -176,6 +180,8 @@ function OwnerTreePage() {
           ornaments={tree.ornaments}
           interactive={!tree.locked}
           onSelect={openLetter}
+          senderNames={senderNames}
+          showSenderNames
           showEmptyMessage
           showNameplate={false}
         />
