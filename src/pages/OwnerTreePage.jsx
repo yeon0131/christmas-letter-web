@@ -224,9 +224,11 @@ function OwnerTreePage() {
         <Countdown revealAt={tree.revealAt} />
       ) : (
         <section className="nyan-unlocked-card">
-          <span aria-hidden="true">✦</span>
-          <h2>편지가 열렸어요!</h2>
-          <p>냥트리의 물고기를 눌러 편지를 읽고 누가 썼는지 맞혀보세요.</p>
+          <span className="nyan-unlocked-date" aria-hidden="true">12.25</span>
+          <div>
+            <h2>선물 편지가 열렸어요!</h2>
+            <p>냥트리의 물고기를 눌러 친구들의 편지를 읽어보세요.</p>
+          </div>
         </section>
       )}
 
@@ -240,6 +242,7 @@ function OwnerTreePage() {
           size="wide"
         >
           <article className="opened-letter">
+            <div className="letter-opened-stamp" aria-hidden="true">OPEN!</div>
             <div className="letter-paper">
               <p>{selectedLetter.content}</p>
               <div className="letter-signature">

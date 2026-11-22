@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import OwnerTreePage from './pages/OwnerTreePage'
 import PublicTreePage from './pages/PublicTreePage'
+import OpenTreePreviewPage from './pages/OpenTreePreviewPage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/create" element={<Navigate to="/" replace />} />
           <Route path="/tree/:slug" element={<PublicTreePage />} />
           <Route path="/my-tree/:slug" element={<OwnerTreePage />} />
+          {import.meta.env.DEV && <Route path="/preview/christmas-open" element={<OpenTreePreviewPage />} />}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
