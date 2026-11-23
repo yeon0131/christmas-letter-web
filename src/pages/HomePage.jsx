@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { treeApi } from '../api'
 import guideCat from '../assets/guide-cat.png'
@@ -23,14 +23,32 @@ function HomePage() {
   const navigate = useNavigate()
   const [ownerName, setOwnerName] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('냥트리 만드는 중...')
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    treeApi.warmUp().catch(() => {
+      // 생성 버튼을 누르면 다시 연결을 시도하고 화면에 오류를 안내한다.
+    })
+  }, [])
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setError('')
     setSubmitting(true)
+    setSubmitMessage('냥트리 만드는 중...')
+
+    const wakeUpNotice = window.setTimeout(() => {
+      setSubmitMessage('무료 서버를 깨우는 중...')
+    }, 2500)
+
+    const slowNotice = window.setTimeout(() => {
+      setSubmitMessage('조금만 더 기다려 주세요...')
+    }, 20000)
 
     try {
+      await treeApi.warmUp()
+      setSubmitMessage('냥트리 만드는 중...')
       // 운영 백엔드가 이전 버전일 때도 트리 생성이 되도록 기본 물고기를 함께 보낸다.
       // 화면에서는 트리 생성 시 물고기를 선택하지 않고, 편지를 쓸 때만 고른다.
       const created = await treeApi.create({
@@ -47,6 +65,8 @@ function HomePage() {
     } catch (requestError) {
       setError(requestError.message)
     } finally {
+      window.clearTimeout(wakeUpNotice)
+      window.clearTimeout(slowNotice)
       setSubmitting(false)
     }
   }
@@ -100,7 +120,7 @@ function HomePage() {
         <div className="nyan-button-wrap">
           <span className="nyan-button-rays left" aria-hidden="true" />
           <button type="submit" disabled={submitting}>
-            {submitting ? '냥트리 만드는 중...' : '내 냥트리 만들기'} <span aria-hidden="true">›</span>
+            {submitting ? submitMessage : '내 냥트리 만들기'} <span aria-hidden="true">›</span>
           </button>
           <span className="nyan-button-rays right" aria-hidden="true" />
         </div>

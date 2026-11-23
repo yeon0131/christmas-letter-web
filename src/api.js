@@ -1,4 +1,9 @@
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080').replace(/\/$/, '')
+const REQUEST_TIMEOUT_MS = 120000
+const WARM_UP_VALID_MS = 10 * 60 * 1000
+
+let warmUpPromise = null
+let warmedUpAt = 0
 
 export class ApiError extends Error {
   constructor(message, status, data) {
@@ -9,14 +14,28 @@ export class ApiError extends Error {
   }
 }
 
-async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  })
+async function request(path, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
+  const controller = new AbortController()
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+  let response
+
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    })
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new ApiError('서버 응답이 너무 늦어졌어요. 잠시 후 다시 시도해 주세요.', 0, null)
+    }
+    throw new ApiError('서버에 연결하지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.', 0, null)
+  } finally {
+    window.clearTimeout(timeoutId)
+  }
 
   const hasBody = response.status !== 204
   const data = hasBody ? await response.json().catch(() => null) : null
@@ -37,6 +56,24 @@ async function request(path, options = {}) {
 }
 
 export const treeApi = {
+  warmUp() {
+    if (Date.now() - warmedUpAt < WARM_UP_VALID_MS) {
+      return Promise.resolve()
+    }
+
+    if (!warmUpPromise) {
+      warmUpPromise = request('/actuator/health')
+        .then(() => {
+          warmedUpAt = Date.now()
+        })
+        .finally(() => {
+          warmUpPromise = null
+        })
+    }
+
+    return warmUpPromise
+  },
+
   create(payload) {
     return request('/api/trees', {
       method: 'POST',
