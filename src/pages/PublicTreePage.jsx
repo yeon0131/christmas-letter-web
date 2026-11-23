@@ -76,6 +76,10 @@ function PublicTreePage() {
   if (loading) return <LoadingView />
   if (loadError) return <ErrorView message={loadError} onRetry={loadTree} />
 
+  const senderNames = Object.fromEntries(
+    tree.ornaments.map((ornament) => [ornament.id, ornament.senderName]),
+  )
+
   return (
     <section className="nyan-public-page">
       {notice && <div className="toast" role="status">{notice}</div>}
@@ -90,6 +94,8 @@ function PublicTreePage() {
         <ChristmasTree
           ownerName={tree.ownerName}
           ornaments={tree.ornaments}
+          senderNames={senderNames}
+          showSenderNames
           showEmptyMessage
           showNameplate={false}
         />
