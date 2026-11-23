@@ -729,8 +729,34 @@ button.nyan-tree-fish:hover { z-index: 4; transform: translate(-50%, -50%) rotat
   transform: rotate(-.25deg);
 }
 
-.nyan-share-heading { display: grid; grid-template-columns: 25px minmax(0, 1fr); gap: 5px; align-items: start; }
-.nyan-share-heading > span { color: var(--nyan-yellow); font-size: 25px; line-height: 1; }
+.nyan-share-heading { display: grid; grid-template-columns: 29px minmax(0, 1fr); gap: 7px; align-items: start; }
+
+.nyan-public-icon {
+  display: grid;
+  width: 29px;
+  height: 29px;
+  margin-top: -2px;
+  color: var(--nyan-green);
+  place-items: center;
+  transform: rotate(-4deg);
+}
+
+.nyan-public-icon svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(.8px .8px 0 rgba(83, 99, 51, .12));
+}
+
+.nyan-public-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nyan-public-icon .nyan-public-outline { stroke-width: 2.5; }
 
 .nyan-share-heading h2,
 .nyan-manage-box h2 {

@@ -2,7 +2,7 @@ Add-Type -AssemblyName System.Drawing
 
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $assetRoot = Join-Path $projectRoot 'src\assets'
-$outputPath = Join-Path $projectRoot 'public\og-preview-v2.png'
+$outputPath = Join-Path $projectRoot 'public\og-preview-v3.png'
 $privateFonts = [System.Drawing.Text.PrivateFontCollection]::new()
 $privateFonts.AddFontFile((Join-Path $PSScriptRoot 'fonts\Gaegu-Bold.ttf'))
 $gaeguFamily = $privateFonts.Families[0]
@@ -69,6 +69,16 @@ $creamBrush = [System.Drawing.SolidBrush]::new((New-Color '#FFFAF0'))
 
 $graphics.DrawString('야옹아멍멍해바', $brandFont, $inkBrush, 154, 67)
 $graphics.DrawString('크리스마스 선물 편지', $kickerFont, $redBrush, 68, 172)
+
+$topHighlightPath = [System.Drawing.Drawing2D.GraphicsPath]::new()
+$topHighlightPath.AddClosedCurve([System.Drawing.PointF[]]@(
+  [System.Drawing.PointF]::new(62, 225),
+  [System.Drawing.PointF]::new(365, 220),
+  [System.Drawing.PointF]::new(371, 292),
+  [System.Drawing.PointF]::new(68, 300)
+), 0.15)
+$graphics.FillPath($yellowBrush, $topHighlightPath)
+$topHighlightPath.Dispose()
 
 $highlightPath = [System.Drawing.Drawing2D.GraphicsPath]::new()
 $highlightPath.AddClosedCurve([System.Drawing.PointF[]]@(

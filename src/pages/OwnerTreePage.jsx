@@ -203,7 +203,12 @@ function OwnerTreePage() {
 
       <section className="nyan-share-box" aria-label="공개 링크 공유">
         <div className="nyan-share-heading">
-          <span aria-hidden="true">✦</span>
+          <span className="nyan-public-icon" aria-hidden="true">
+            <svg viewBox="0 0 34 34">
+              <path className="nyan-public-outline" d="M17.2 3.2C24.8 3 30.6 8.9 30.8 16.8c.2 7.7-5.8 13.9-13.6 14C9.4 31 3.2 24.9 3.3 17.1 3.4 9.3 9.4 3.4 17.2 3.2Z" />
+              <path d="M4.4 16.8c6 .6 19.6.5 25.3-.1M17 3.9c-4.2 4.1-6 8.8-5.9 13.2.1 4.7 2 9.5 6.1 13M17.3 3.9c4 3.9 5.8 8.7 5.7 13.1-.1 4.7-2 9.5-5.8 13.1" />
+            </svg>
+          </span>
           <div><h2>친구에게 보낼 공개 링크</h2><p>이 링크로 들어온 친구들이 편지를 달 수 있어요.</p></div>
         </div>
         <div className="nyan-link-paper"><span>{shareUrl}</span></div>
