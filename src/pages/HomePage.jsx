@@ -39,11 +39,11 @@ function HomePage() {
     setSubmitMessage('냥트리 만드는 중...')
 
     const wakeUpNotice = window.setTimeout(() => {
-      setSubmitMessage('무료 서버를 깨우는 중...')
+      setSubmitMessage('냥트리를 정성껏 꾸미는 중...')
     }, 2500)
 
     const slowNotice = window.setTimeout(() => {
-      setSubmitMessage('조금만 더 기다려 주세요...')
+      setSubmitMessage('선물 편지를 받을 준비를 하는 중...')
     }, 20000)
 
     try {

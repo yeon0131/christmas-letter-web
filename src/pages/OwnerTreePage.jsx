@@ -215,7 +215,13 @@ function OwnerTreePage() {
       </section>
 
       <section className="nyan-manage-box" aria-label="관리 링크 안내">
-        <span className="nyan-manage-key" aria-hidden="true">⌁</span>
+        <span className="nyan-manage-lock" aria-hidden="true">
+          <svg viewBox="0 0 38 42">
+            <path className="nyan-lock-shackle" d="M10.5 18.8v-5.1C10.5 7.4 14 4 19 4s8.5 3.5 8.5 9.7v5.1" />
+            <path className="nyan-lock-body" d="M7.2 18.2c5.8-.7 17.9-.6 23.6.2.8 5 .5 13.7-.4 18.3-5.4 1-17.7 1-23.1-.2-.8-5.2-.9-13.2-.1-18.3Z" />
+            <path className="nyan-lock-detail" d="M19 24.8c-1.7 0-2.8 1.2-2.8 2.6 0 1 .5 1.8 1.4 2.3l-.5 3.1h3.8l-.5-3.1c.9-.5 1.4-1.3 1.4-2.3 0-1.4-1.1-2.6-2.8-2.6Z" />
+          </svg>
+        </span>
         <div><h2>관리 링크는 나만 보관해요</h2><p>로그인 없이 이 링크로 내 냥트리를 다시 열 수 있어요.<br />친구에게는 위의 공개 링크만 보내주세요.</p></div>
         <button type="button" onClick={() => copyText(manageUrl, '관리 링크를 복사했어요. 나만 보관해요!')}>관리 링크 복사하기</button>
       </section>
