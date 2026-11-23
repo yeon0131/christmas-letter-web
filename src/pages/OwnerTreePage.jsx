@@ -8,6 +8,8 @@ import Modal from '../components/Modal'
 import { ErrorView, LoadingView } from '../components/StatusView'
 import { getTreeAccess, saveTreeAccess } from '../storage'
 
+const SHARE_PREVIEW_VERSION = '3'
+
 function getInitialAccess(slug) {
   const hashKey = new URLSearchParams(window.location.hash.slice(1)).get('key')
   const saved = getTreeAccess(slug)
@@ -71,7 +73,7 @@ function OwnerTreePage() {
   }, [adminKey, slug])
 
   const shareUrl = useMemo(
-    () => `${window.location.origin}/tree/${slug}`,
+    () => `${window.location.origin}/tree/${slug}?preview=${SHARE_PREVIEW_VERSION}`,
     [slug],
   )
 
