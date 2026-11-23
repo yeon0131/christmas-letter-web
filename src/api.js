@@ -55,6 +55,23 @@ async function request(path, options = {}, timeoutMs = REQUEST_TIMEOUT_MS) {
   return data
 }
 
+async function warmUpRequest() {
+  const controller = new AbortController()
+  const timeoutId = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS)
+
+  try {
+    // 응답 본문은 필요 없고 서버를 미리 깨우는 용도다.
+    // Render의 health 엔드포인트에는 CORS 헤더가 없으므로 opaque 응답을 허용한다.
+    await fetch(`${API_BASE_URL}/actuator/health`, {
+      mode: 'no-cors',
+      cache: 'no-store',
+      signal: controller.signal,
+    })
+  } finally {
+    window.clearTimeout(timeoutId)
+  }
+}
+
 export const treeApi = {
   warmUp() {
     if (Date.now() - warmedUpAt < WARM_UP_VALID_MS) {
@@ -62,7 +79,7 @@ export const treeApi = {
     }
 
     if (!warmUpPromise) {
-      warmUpPromise = request('/actuator/health')
+      warmUpPromise = warmUpRequest()
         .then(() => {
           warmedUpAt = Date.now()
         })
