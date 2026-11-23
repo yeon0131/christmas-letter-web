@@ -2,7 +2,10 @@ Add-Type -AssemblyName System.Drawing
 
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $assetRoot = Join-Path $projectRoot 'src\assets'
-$outputPath = Join-Path $projectRoot 'public\og-preview.png'
+$outputPath = Join-Path $projectRoot 'public\og-preview-v2.png'
+$privateFonts = [System.Drawing.Text.PrivateFontCollection]::new()
+$privateFonts.AddFontFile((Join-Path $PSScriptRoot 'fonts\Gaegu-Bold.ttf'))
+$gaeguFamily = $privateFonts.Families[0]
 
 $canvas = [System.Drawing.Bitmap]::new(1200, 630, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
 $graphics = [System.Drawing.Graphics]::FromImage($canvas)
@@ -52,11 +55,11 @@ $fishStar = [System.Drawing.Image]::FromFile((Join-Path $assetRoot 'hero-fish-st
 
 $graphics.DrawImage($logo, 62, 48, 82, 82)
 
-$brandFont = [System.Drawing.Font]::new('휴먼편지체', 35, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-$kickerFont = [System.Drawing.Font]::new('휴먼편지체', 34, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-$titleFont = [System.Drawing.Font]::new('휴먼편지체', 68, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-$subtitleFont = [System.Drawing.Font]::new('휴먼편지체', 31, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
-$buttonFont = [System.Drawing.Font]::new('휴먼편지체', 30, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$brandFont = [System.Drawing.Font]::new($gaeguFamily, 39, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$kickerFont = [System.Drawing.Font]::new($gaeguFamily, 38, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$titleFont = [System.Drawing.Font]::new($gaeguFamily, 72, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$subtitleFont = [System.Drawing.Font]::new($gaeguFamily, 35, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
+$buttonFont = [System.Drawing.Font]::new($gaeguFamily, 34, [System.Drawing.FontStyle]::Bold, [System.Drawing.GraphicsUnit]::Pixel)
 
 $inkBrush = [System.Drawing.SolidBrush]::new((New-Color '#2B251F'))
 $redBrush = [System.Drawing.SolidBrush]::new((New-Color '#D95139'))
@@ -122,5 +125,6 @@ $greenPen.Dispose()
 $paperDotBrush.Dispose()
 $graphics.Dispose()
 $canvas.Dispose()
+$privateFonts.Dispose()
 
 Write-Output $outputPath

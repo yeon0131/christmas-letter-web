@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage'
 import OwnerTreePage from './pages/OwnerTreePage'
 import PublicTreePage from './pages/PublicTreePage'
 import OpenTreePreviewPage from './pages/OpenTreePreviewPage'
+import PrivacyPage from './pages/PrivacyPage'
+import TermsPage from './pages/TermsPage'
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/create" element={<Navigate to="/" replace />} />
           <Route path="/tree/:slug" element={<PublicTreePage />} />
           <Route path="/my-tree/:slug" element={<OwnerTreePage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           {import.meta.env.DEV && <Route path="/preview/christmas-open" element={<OpenTreePreviewPage />} />}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

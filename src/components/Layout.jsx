@@ -23,6 +23,11 @@ function Layout({ children }) {
 
       <footer className="site-footer">
         <span>야옹아멍멍해바 · 2026</span>
+        <nav aria-label="정책 안내">
+          <Link to="/terms">이용약관</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/privacy">개인정보처리방침</Link>
+        </nav>
       </footer>
     </div>
   )
